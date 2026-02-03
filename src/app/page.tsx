@@ -19,32 +19,32 @@ export default function Home() {
           title="Los libros más prestados"
           description="Los libros con mayor cantidad de préstamos históricos."
           href="/reports/MostBorrowedBooks"
-          href2="/Podio2.jpg"
+          href2="/prestamos.webp"
         />
 
         <DashboardCard 
           title="Prestamos vencidos"
           description="Identifica los socios con préstamos vencidos."
           href="/reports/OverdueLoans"
-          href2="/Overdue.jpg"
+          href2="/vencidos.webp"
         />
         <DashboardCard 
           title="Resumen de multas"
           description="Análisis de los clientes con mayores multas."
           href="/reports/FinesSummary"
-          href2="/Fines.jpg"
+          href2="/multas.webp"
         />
         <DashboardCard 
           title="Actividad y riesgo de socios"
           description="consulta la actividad y el riesgo asociado a cada socio."
           href="/reports/MemberActivity"
-          href2="/MemberActivity.jpg"
+          href2="/tipo.webp"
         />
         <DashboardCard 
           title="Estado de inventario"
           description="Visualiza el estado de disponibilidad de cada categoría de libros."
           href="/reports/Inventory"
-          href2="/inventory.jpg"
+          href2="/inventarios.webp"
         />
 
         </div>
