@@ -14,6 +14,12 @@ docker compose up --build
 
 El sistema estará disponible en: `http://localhost:3000`
 
+
+En caso de fallar o querer acutalizar:
+```bash
+docker compose down -v
+
+```
 ---
 
 ## Evidencia de Seguridad 
