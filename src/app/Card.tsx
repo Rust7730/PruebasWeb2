@@ -4,7 +4,7 @@ interface DashboardCardProps {
   title: string;
   description: string;
   href: string; 
-  href2: string; // Sugerencia: renombrar a 'imageSrc' para mayor claridad
+  href2: string; 
 }
 
 export const DashboardCard = ({ 
