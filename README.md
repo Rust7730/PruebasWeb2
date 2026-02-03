@@ -12,7 +12,7 @@ docker compose up --build
 
 ```
 
-El sistema estará disponible en: `http://localhost:3000`
+El sistema estará disponible en: `http://localhost:3001`
 
 
 En caso de fallar o querer acutalizar:
