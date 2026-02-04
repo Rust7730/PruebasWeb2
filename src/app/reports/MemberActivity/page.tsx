@@ -13,11 +13,11 @@ export default async function MembersPage() {
         backUrl="/" 
         backText="Volver al Dashboard"
       />
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-6xl mx-auto p-8">
 
         {error && <p className="text-red-600 mb-4">{error}</p>}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {members.map((m) => {
                 const isRisk = m.member_standing === 'RISK';
                 const isSuper = m.member_standing === 'SUPER_USER';
@@ -26,7 +26,7 @@ export default async function MembersPage() {
                 const badgeColor = isRisk ? 'bg-red-100 text-red-700' : isSuper ? 'bg-purple-100 text-purple-700' : 'bg-emerald-100 text-emerald-700';
 
                 return (
-                  <div key={m.member_id} className={`p-6 rounded-lg border-l-4 shadow-sm bg-white hover:shadow-md transition-shadow ${borderColor}`}>
+                  <div key={m.member_id} className={`p-6 rounded-lg border-l-4  shadow-sm bg-white hover:shadow-md transition-shadow ${borderColor}`}>
                       
                       <div className="flex justify-between items-start mb-4">
                           <div className="overflow-hidden">

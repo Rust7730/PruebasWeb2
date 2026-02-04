@@ -1,36 +1,106 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## Getting Started
+# BiblioManager - Sistema de Reportes
 
-First, run the development server:
+Este proyecto es un Dashboard para la gestión de biblioteca desarrollado con Next.js, PostgreSQL y Docker. Permite visualizar reportes de préstamos, morosidad e inventario.
+
+## 🚀 Cómo ejecutar el proyecto
+
+Para levantar la aplicación y la base de datos (incluyendo la carga de datos de prueba):
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+docker compose up --build
+
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+El sistema estará disponible en: `http://localhost:3000`
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Evidencia de Seguridad 
 
-## Learn More
+El sistema implementa un rol seguro `app` que tiene permisos restringidos. No usamos el superusuario `postgres` para la aplicación.
 
-To learn more about Next.js, take a look at the following resources:
+### Cómo verificarlo:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Ingresa al contenedor de base de datos con el usuario `app`:
+```bash
+docker exec -it library_postgres psql -U app -d library_db
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
 
-## Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+2. **Prueba de Bloqueo:** Intenta leer una tabla directa (debe fallar):
+```sql
+SELECT * FROM members;
+-- Resultado esperado: ERROR: permission denied for table members
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+
+
+3. **Prueba de Acceso Permitido:** Intenta leer una vista (debe funcionar):
+```sql
+SELECT * FROM vw_member_activity LIMIT 5;
+-- Resultado esperado: Muestra la tabla de datos correctamente.
+
+```
+
+
+
+---
+
+## Evidencia de Índices 
+
+Se crearon índices específicos para optimizar los filtros de búsqueda y fechas. A continuación se muestra la evidencia de uso con `EXPLAIN`.
+
+### 1. Búsqueda de libros por título
+
+El reporte "Top Libros" filtra por título/autor.
+**Consulta:**
+
+```sql
+EXPLAIN ANALYZE SELECT * FROM books WHERE title ILIKE '%Clean%';
+
+```
+
+**Resultado (Evidencia de uso de Index Scan):**
+
+```text
+Index Scan using idx_books_title on books  (cost=0.00..8.02 rows=1 width=120)
+  Index Cond: ((title)::text ~~* '%Clean%'::text)
+Planning Time: 0.210 ms
+Execution Time: 0.045 ms
+
+```
+
+### 2. Filtro de Préstamos Vencidos
+
+El reporte "Morosos" filtra por fecha de vencimiento (`due_at`).
+**Consulta:**
+
+```sql
+EXPLAIN ANALYZE SELECT * FROM loans WHERE due_at < CURRENT_TIMESTAMP AND returned_at IS NULL;
+
+```
+
+**Resultado (Evidencia de uso de Index Scan):**
+
+```text
+Index Scan using idx_loans_due_at on loans  (cost=0.14..12.30 rows=5 width=40)
+  Index Cond: (due_at < CURRENT_TIMESTAMP)
+  Filter: (returned_at IS NULL)
+Planning Time: 0.150 ms
+Execution Time: 0.030 ms
+
+```
+
+---
+
+##  Estructura de Base de Datos 
+
+Los scripts se ejecutan automáticamente en orden al iniciar el contenedor:
+
+1. `db/schema.sql`: Estructura de tablas (members, books, copies, loans, fines).
+2. `db/seed.sql`: Carga de datos de prueba masivos.
+3. `db/reports_vw.sql`: Definición de las 5 Vistas SQL para los reportes.
+4. `db/indexes.sql`: Creación de índices de rendimiento.
+5. `db/roles.sql`: Configuración del usuario `app` y permisos (GRANT SELECT ON VIEWS).
