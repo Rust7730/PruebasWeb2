@@ -74,3 +74,31 @@ FROM fines f
 JOIN loans l ON f.loan_id = l.id
 GROUP BY TO_CHAR(l.loaned_at, 'YYYY-MM')
 HAVING SUM(f.amount) > 0;
+
+-- ==============================================================================
+-- VIEW 4: Actividad de Socios y Riesgo
+-- TÉCNICA: HAVING + CASE + Agregación Compleja
+-- REQUISITOS: Identificar socios activos.
+-- GRAIN: Un registro por Socio.
+-- NO SELECT *: Alias explícitos.
+-- ==============================================================================
+CREATE OR REPLACE VIEW vw_member_activity AS
+SELECT 
+    m.id AS member_id,
+    m.name,
+    m.email,
+    COUNT(l.id) AS total_loans_history,
+    COUNT(CASE WHEN l.returned_at IS NULL THEN 1 END) AS current_active_loans,
+    ROUND(
+        COUNT(CASE WHEN l.returned_at > l.due_at THEN 1 END)::numeric / 
+        NULLIF(COUNT(l.id), 0) * 100, 
+    1) AS late_return_rate,
+    CASE 
+        WHEN COUNT(l.id) > 20 AND COUNT(CASE WHEN l.returned_at > l.due_at THEN 1 END) = 0 THEN 'SUPER_USER'
+        WHEN COUNT(CASE WHEN l.returned_at > l.due_at THEN 1 END)::numeric / NULLIF(COUNT(l.id), 0) > 0.5 THEN 'RISK'
+        ELSE 'NORMAL'
+    END AS member_standing
+FROM members m
+LEFT JOIN loans l ON m.id = l.member_id
+GROUP BY m.id, m.name, m.email
+HAVING COUNT(l.id) > 0;
