@@ -29,11 +29,11 @@ export default async function FinesPage(props: {
             <form className="flex flex-wrap gap-4 items-end">
                 <div>
                     <label className="block text-xs text-gray-500 mb-1">Desde (YYYY-MM)</label>
-                    <input name="start" type="month" defaultValue={start} className="border rounded px-3 py-2 text-sm bg-gray-50"/>
+                    <input name="start" type="month" defaultValue={start} className="border rounded px-3 py-2 text-sm text-green-600 bg-green-50"/>
                 </div>
                 <div>
                     <label className="block text-xs text-gray-500 mb-1">Hasta (YYYY-MM)</label>
-                    <input name="end" type="month" defaultValue={end} className="border rounded px-3 py-2 text-sm bg-gray-50"/>
+                    <input name="end" type="month" defaultValue={end} className="border rounded px-3 py-2 text-sm text-green-600 bg-green-50"/>
                 </div>
                 <button className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded text-sm font-medium transition-colors">
                   Aplicar Filtros
