@@ -15,5 +15,6 @@ export async function getMostBorrowedBooks(
   
   const values = [`%${search}%`, limit, offset];
   const { rows } = await query(sql, values);
+
   return rows;
 }
