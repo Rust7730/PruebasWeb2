@@ -102,3 +102,25 @@ FROM members m
 LEFT JOIN loans l ON m.id = l.member_id
 GROUP BY m.id, m.name, m.email
 HAVING COUNT(l.id) > 0;
+
+
+-- ==============================================================================
+-- VIEW 5: Salud del Inventario
+-- TÉCNICA: CASE / COALESCE
+-- REQUISITOS: Salud por categoría.
+-- GRAIN: Un registro por Categoría.
+-- ==============================================================================
+CREATE OR REPLACE VIEW vw_inventory_health AS
+SELECT 
+    b.category,
+    COUNT(c.id) AS total_copies,
+    COUNT(CASE WHEN c.status = 'AVAILABLE' THEN 1 END) AS in_shelf,
+    COUNT(CASE WHEN c.status = 'LOANED' THEN 1 END) AS loaned_out,
+    COUNT(CASE WHEN c.status IN ('LOST', 'MAINTENANCE') THEN 1 END) AS unavailable,
+    ROUND(
+        COUNT(CASE WHEN c.status = 'AVAILABLE' THEN 1 END)::numeric / 
+        NULLIF(COUNT(c.id), 0) * 100, 
+    1) AS availability_percentage
+FROM books b
+JOIN copies c ON b.id = c.book_id
+GROUP BY b.category;
