@@ -8,7 +8,7 @@ CREATE TABLE members (
     id SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
-    member_type VARCHAR(20) DEFAULT 'STANDARD', -- STANDARD, VIP, STUDENT
+    member_type VARCHAR(20) DEFAULT 'STANDARD',
     joined_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     is_active BOOLEAN DEFAULT TRUE
 );
@@ -26,8 +26,9 @@ CREATE TABLE copies (
     id SERIAL PRIMARY KEY,
     book_id INT REFERENCES books(id) ON DELETE CASCADE,
     barcode VARCHAR(50) UNIQUE NOT NULL,
-    status VARCHAR(20) DEFAULT 'AVAILABLE' -- AVAILABLE, LOANED, LOST, MAINTENANCE
+    status VARCHAR(20) DEFAULT 'AVAILABLE' 
 );
+
 
 CREATE TABLE loans (
     id SERIAL PRIMARY KEY,
@@ -38,7 +39,6 @@ CREATE TABLE loans (
     returned_at TIMESTAMP 
 );
 
--- 5. Tabla de Multas
 CREATE TABLE fines (
     id SERIAL PRIMARY KEY,
     loan_id INT REFERENCES loans(id),

@@ -51,9 +51,8 @@ SELECT
         WHEN EXTRACT(DAY FROM (al.today - al.due_at)) <= 3 THEN 5.00
         WHEN EXTRACT(DAY FROM (al.today - al.due_at)) <= 10 THEN 20.00
         ELSE 50.00
-    END AS fine_amount
-FROM active_loans;
-
+    END AS suggested_fine_amount
+FROM active_loans al;  
 -- ==============================================================================
 -- VIEW 3: Resumen mensual de multas
 -- TÉCNICA: HAVING + Agregación (SUM) + COALESCE

@@ -16,9 +16,9 @@ export default function Home() {
 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
         
         <DashboardCard 
-          title="Top Productos"
-          description="Los 7 productos con mayor recaudación histórica y su impacto."
-          href="/reports/TopProducts"
+          title="Los libros más prestados"
+          description="Los libros con mayor cantidad de préstamos históricos."
+          href="/reports/MostBorrowedBooks"
           href2="/Podio2.jpg"
         />
 
