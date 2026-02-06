@@ -1,0 +1,48 @@
+DROP TABLE IF EXISTS fines;
+DROP TABLE IF EXISTS loans;
+DROP TABLE IF EXISTS copies;
+DROP TABLE IF EXISTS books;
+DROP TABLE IF EXISTS members;
+
+CREATE TABLE members (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    member_type VARCHAR(20) DEFAULT 'STANDARD', -- STANDARD, VIP, STUDENT
+    joined_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    is_active BOOLEAN DEFAULT TRUE
+);
+
+
+CREATE TABLE books (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(150) NOT NULL,
+    author VARCHAR(100) NOT NULL,
+    category VARCHAR(50) NOT NULL,
+    isbn VARCHAR(20) UNIQUE
+);
+
+CREATE TABLE copies (
+    id SERIAL PRIMARY KEY,
+    book_id INT REFERENCES books(id) ON DELETE CASCADE,
+    barcode VARCHAR(50) UNIQUE NOT NULL,
+    status VARCHAR(20) DEFAULT 'AVAILABLE' -- AVAILABLE, LOANED, LOST, MAINTENANCE
+);
+
+CREATE TABLE loans (
+    id SERIAL PRIMARY KEY,
+    copy_id INT REFERENCES copies(id),
+    member_id INT REFERENCES members(id),
+    loaned_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    due_at TIMESTAMP NOT NULL,
+    returned_at TIMESTAMP 
+);
+
+-- 5. Tabla de Multas
+CREATE TABLE fines (
+    id SERIAL PRIMARY KEY,
+    loan_id INT REFERENCES loans(id),
+    amount DECIMAL(10, 2) NOT NULL,
+    status VARCHAR(20) DEFAULT 'PENDING ,PAID, WAIVED', 
+    paid_at TIMESTAMP
+);
