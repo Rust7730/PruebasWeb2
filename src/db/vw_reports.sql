@@ -53,3 +53,24 @@ SELECT
         ELSE 50.00
     END AS fine_amount
 FROM active_loans;
+
+-- ==============================================================================
+-- VIEW 3: Resumen mensual de multas
+-- TÉCNICA: HAVING + Agregación (SUM) + COALESCE
+-- REQUISITOS: Filtro por rango de fechas.
+-- GRAIN: Un registro por Mes/Año.
+-- ==============================================================================
+CREATE OR REPLACE VIEW vw_fines_summary AS
+SELECT 
+    TO_CHAR(l.loaned_at, 'YYYY-MM') AS month_year,
+    COUNT(f.id) AS total_fines_issued,
+    COALESCE(SUM(CASE WHEN f.status = 'PAID' THEN f.amount END), 0) AS total_collected,
+    COALESCE(SUM(CASE WHEN f.status = 'PENDING' THEN f.amount END), 0) AS total_pending,
+    ROUND(
+        COALESCE(SUM(CASE WHEN f.status = 'PAID' THEN f.amount END), 0) / 
+        NULLIF(SUM(f.amount), 0) * 100, 
+    2) as collection_rate
+FROM fines f
+JOIN loans l ON f.loan_id = l.id
+GROUP BY TO_CHAR(l.loaned_at, 'YYYY-MM')
+HAVING SUM(f.amount) > 0;
