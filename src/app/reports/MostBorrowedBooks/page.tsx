@@ -5,16 +5,16 @@ import Link from 'next/link';
 
 export const dynamic = 'force-dynamic';
 
-export default async function TopBooksPage({
-  searchParams,
-}: {
-  searchParams?: {
-    q?: string;
-    page?: string;
-  };
-}) {
-  const query = searchParams?.q || '';
-  const currentPage = Number(searchParams?.page) || 1;
+type SearchParams = Promise<{ q?: string; page?: string }>;
+
+export default async function TopBooksPage(props: {
+  searchParams: SearchParams 
+})
+ {
+  const searchParams = await props.searchParams;
+  
+  const query = searchParams.q || '';
+  const currentPage = Number(searchParams.page) || 1;
 
   const { data: books, totalPages, error } = await getMostBorrowedBooks(query, currentPage);
 
@@ -24,7 +24,7 @@ export default async function TopBooksPage({
 
         <div className="flex items-center justify-between mb-8 flex-col md:flex-row gap-4 ">
           <div>
-             <Link href="/" className="text-blue-600 text-sm hover:underline mb-2 block">&larr; Volver al Dashboard</Link>
+             <Link href="/" className="text-blue-600 text-sm hover:underline mb-2 block border border-blue-600 rounded px-2 py-1">&larr; Volver al Dashboard</Link>
              <h1 className="text-3xl font-bold text-gray-900">Top Libros Populares</h1>
              <p className="text-gray-500 mt-1">Ranking basado en frecuencia histórica de préstamos.</p>
           </div>
@@ -41,13 +41,13 @@ export default async function TopBooksPage({
         ) : (
           <div className="bg-white shadow-sm rounded-lg overflow-hidden border border-gray-200">
             <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
+              <thead className="bg-green-100">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Rank</th>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Libro</th>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Categoría</th>
-                  <th className="px-6 py-3 text-center text-xs font-bold text-gray-500 uppercase tracking-wider">Total Préstamos</th>
-                  <th className="px-6 py-3 text-center text-xs font-bold text-gray-500 uppercase tracking-wider">% Popularidad</th>
+                  <th className="px-6 py-3 text-left text-xs font-bold text-green-700 uppercase tracking-wider">Rank</th>
+                  <th className="px-6 py-3 text-left text-xs font-bold text-green-700 uppercase tracking-wider">Libro</th>
+                  <th className="px-6 py-3 text-left text-xs font-bold text-green-700 uppercase tracking-wider">Categoría</th>
+                  <th className="px-6 py-3 text-center text-xs font-bold text-green-700 uppercase tracking-wider">Total Préstamos</th>
+                  <th className="px-6 py-3 text-center text-xs font-bold text-green-700 uppercase tracking-wider">% Popularidad</th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
