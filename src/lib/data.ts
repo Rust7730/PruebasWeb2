@@ -95,3 +95,14 @@ export async function getMemberActivity() {
     return { data: [], error: "Error al cargar socios." };
   } 
 }
+
+
+export async function getInventoryHealth() {
+  try {
+    const result = await query('SELECT * FROM vw_inventory_health');
+    const data = z.array(InventoryHealthSchema).parse(result.rows);
+    return { data, error: null };
+  } catch (err) {
+    return { data: [], error: "Error al cargar inventario." };
+  }
+}

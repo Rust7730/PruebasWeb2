@@ -41,10 +41,10 @@ export default function Home() {
           href2="/MemberActivity.jpg"
         />
         <DashboardCard 
-          title="Porcentaje de participación de productos"
-          description="Visualiza el porcentaje de participación de cada producto en las ventas totales."
-          href="/reports/ParticipationProduct"
-          href2="/producto-estrella.jpg"
+          title="Estado de inventario"
+          description="Visualiza el estado de disponibilidad de cada categoría de libros."
+          href="/reports/Inventory"
+          href2="/inventory.jpg"
         />
 
         </div>
