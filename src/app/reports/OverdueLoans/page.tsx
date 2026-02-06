@@ -1,7 +1,7 @@
 import Pagination from '@/app/components/Pagination';
 import { getOverdueLoans } from '@/lib/data';
 import Link from 'next/link';
-
+import Header from '@/app/components/Headder';
 export const dynamic = 'force-dynamic';
 
 // Definir tipo para Next.js 15
@@ -9,9 +9,7 @@ type SearchParams = Promise<{ days?: string; page?: string }>;
 
 export default async function OverdueLoansPage(props: {
   searchParams: SearchParams
-}) {
-  // 1. Desempaquetar params con await (Obligatorio en Next 15)
-  const searchParams = await props.searchParams;
+}) {  const searchParams = await props.searchParams;
   
   const minDays = Number(searchParams.days) || 0;
   const currentPage = Number(searchParams.page) || 1;
@@ -19,26 +17,27 @@ export default async function OverdueLoansPage(props: {
   const { data: loans, totalPages, error } = await getOverdueLoans(minDays, currentPage);
 
   return (
-    <main className="min-h-screen bg-gray-50 p-8">
-      <div className="max-w-6xl mx-auto">
-        <Link href="/" className="text-blue-600 hover:underline mb-4 block text-sm">&larr; Volver al Dashboard</Link>
-        
+    <main className="min-h-screen bg-gray-50 ">
+        <Header 
+        title="Préstamos Vencidos" 
+        backUrl="/" 
+        backText="Volver al Dashboard"
+      />
+      <div className="max-w-6xl mx-auto p-8">
+      
+      
         <div className="flex flex-col md:flex-row justify-between items-end mb-6 gap-4">
-          <div>
-             <h1 className="text-3xl font-bold text-gray-900">Préstamos Vencidos</h1>
-            <p className="text-gray-500 mt-1">Socios con devoluciones pendientes y multas estimadas.</p>
-          </div>
 
-          <div className="bg-white p-3 rounded shadow-sm border flex items-center gap-2">
+          <div className="bg-white p-3 rounded border shadow-sm border  flex items-center gap-2">
             <form className="flex items-center gap-2">
-                <label className="text-sm font-medium text-gray-700">Mínimo días de atraso:</label>
+                <label className="text-sm font-medium text-gray-700 ">Mínimo días de atraso:</label>
                 <input 
                     name="days" 
                     type="number" 
                     defaultValue={minDays}
                     className="border rounded px-2 py-1 w-20 text-sm"
                 />
-                <button type="submit" className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-sm font-medium transition-colors">
+                <button type="submit" className="bg-red-600 hover:bg-red-700 rounded border text-white px-3 py-1 rounded text-sm font-medium transition-colors">
                   Filtrar
                 </button>
             </form>

@@ -1,5 +1,6 @@
 import Search from '@/app/components/Search';
 import Pagination from '@/app/components/Pagination';
+import Header from '@/app/components/Headder';
 import { getMostBorrowedBooks } from '@/lib/data';
 import Link from 'next/link';
 
@@ -19,16 +20,14 @@ export default async function TopBooksPage(props: {
   const { data: books, totalPages, error } = await getMostBorrowedBooks(query, currentPage);
 
   return (
-    <main className="min-h-screen bg-gray-50 p-8">
-      <div className="max-w-6xl mx-auto">
-
-        <div className="flex items-center justify-between mb-8 flex-col md:flex-row gap-4 ">
-          <div>
-             <Link href="/" className="text-blue-600 text-sm hover:underline mb-2 block border border-blue-600 rounded px-2 py-1">&larr; Volver al Dashboard</Link>
-             <h1 className="text-3xl font-bold text-gray-900">Top Libros Populares</h1>
-             <p className="text-gray-500 mt-1">Ranking basado en frecuencia histórica de préstamos.</p>
-          </div>
-        </div>
+    <main className="min-h-screen bg-gray-50">
+      <Header 
+        title="Top Libros Más Prestados" 
+        backUrl="/" 
+        backText="Volver al Dashboard"
+      />
+      
+      <div className="max-w-6xl mx-auto p-8">
 
         <div className="mb-6 w-full md:w-1/3">
           <Search placeholder="Buscar por título o autor..." />
