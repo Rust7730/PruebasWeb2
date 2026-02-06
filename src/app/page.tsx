@@ -35,10 +35,10 @@ export default function Home() {
           href2="/Fines.jpg"
         />
         <DashboardCard 
-          title="Total de stock por categoría"
-          description="Consulta el inventario disponible seguén por categoría."
-          href="/reports/StockCategories"
-          href2="/Stock.jpg"
+          title="Actividad y riesgo de socios"
+          description="consulta la actividad y el riesgo asociado a cada socio."
+          href="/reports/MemberActivity"
+          href2="/MemberActivity.jpg"
         />
         <DashboardCard 
           title="Porcentaje de participación de productos"

@@ -85,3 +85,13 @@ export async function getFinesSummary(startDate?: string, endDate?: string) {
     return { data: [], error: "Error al cargar multas." };
   }
 }
+
+export async function getMemberActivity() {
+  try {
+    const result = await query('SELECT * FROM vw_member_activity ORDER BY late_return_rate DESC');
+    const data = z.array(MemberActivitySchema).parse(result.rows);
+    return { data, error: null };
+  } catch (err) {
+    return { data: [], error: "Error al cargar socios." };
+  } 
+}
