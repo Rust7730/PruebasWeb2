@@ -64,3 +64,24 @@ export async function getOverdueLoans(minDays: number = 0, page: number = 1) {
     return { data: [], totalPages: 0, totalItems: 0, error: "Error al cargar morosos." };
   }
 }
+
+export async function getFinesSummary(startDate?: string, endDate?: string) {
+  try {
+
+    const dateRegex = /^\d{4}-\d{2}$/;
+    const safeStart = startDate && dateRegex.test(startDate) ? startDate : '2000-01';
+    const safeEnd = endDate && dateRegex.test(endDate) ? endDate : '2099-12';
+
+    const result = await query(
+      `SELECT * FROM vw_fines_summary 
+       WHERE month_year >= $1 AND month_year <= $2
+       ORDER BY month_year DESC`,
+      [safeStart, safeEnd]
+    );
+
+    const data = z.array(FinesSummarySchema).parse(result.rows);
+    return { data, error: null };
+  } catch (err) {
+    return { data: [], error: "Error al cargar multas." };
+  }
+}

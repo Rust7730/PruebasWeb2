@@ -29,10 +29,10 @@ export default function Home() {
           href2="/Overdue.jpg"
         />
         <DashboardCard 
-          title="Mejores Clientes"
-          description="Análisis de los clientes con mayores compras."
-          href="/reports/GreaterBuyers"
-          href2="/VIP.jpg"
+          title="Resumen de multas"
+          description="Análisis de los clientes con mayores multas."
+          href="/reports/FinesSummary"
+          href2="/Fines.jpg"
         />
         <DashboardCard 
           title="Total de stock por categoría"
