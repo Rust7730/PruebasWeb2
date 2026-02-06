@@ -23,10 +23,10 @@ export default function Home() {
         />
 
         <DashboardCard 
-          title="Productos no vendidos"
-          description="Identifica los productos que no han generado ventas."
-          href="/reports/UnsoldProducts"
-          href2="/Unsoled.jpg"
+          title="Prestamos vencidos"
+          description="Identifica los socios con préstamos vencidos."
+          href="/reports/OverdueLoans"
+          href2="/Overdue.jpg"
         />
         <DashboardCard 
           title="Mejores Clientes"
